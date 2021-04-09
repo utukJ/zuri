@@ -11,6 +11,7 @@ except FileNotFoundError:
 
 print("database: ", database)
 
+
 def init():
     print("Welcome to bankPHP")
     user_choice = int(input("Do you want to login or register a new account: login(1) register(2) exit(3)\n"))
@@ -25,7 +26,9 @@ def init():
         init()
 
 
+
 def login():
+
     print("\n********* Login ***********")
 
     account_number = input("Input you account number here. Input 7 if you've forgotten \n")
@@ -46,6 +49,7 @@ def login():
     user_details = database[account_number]
     print(f"Welcome {user_details[0]} {user_details[1]}!")
     bank_operation(account_number)
+    logout()
     
 
 
@@ -70,6 +74,7 @@ def register():
 
     login()
 
+
 def retrieve_acc_number():
     email = input("Enter your email address: \n")
     password = input("Enter your password: \n")
@@ -79,8 +84,10 @@ def retrieve_acc_number():
             return
     print("Your details do not exist!")
 
+
+
 def bank_operation(account_number):
-    selected_option = input("What would you like to do. (1)deposit (2)withdrawal (3)transfer funds (4)Logout \n")
+    selected_option = input("What would you like to do. (1)deposit (2)withdrawal (3)transfer funds (4)check balance (5)Logout \n")
 
     if selected_option == "1":
         amount = eval(input("How much would you like to deposit: \n"))
@@ -93,6 +100,8 @@ def bank_operation(account_number):
         destination = input("Input the account number for the destination: \n")
         transfer_funds(account_number, destination, amount)
     elif selected_option == "4":
+        check_balance()
+    elif selected_option == "5":
         logout()
         return
     else:
@@ -104,21 +113,30 @@ def bank_operation(account_number):
         bank_operation(account_number)
 
 
+
 def withdrawal(account_number, amount):
     database[account_number][4] -= amount
-    print("Funds withdrawal complete. Take your cash!\n")
+    print("Funds withdrawal complete!\n")
+
 
 def deposit(account_number, amount):
     database[account_number][4] += amount
     print("Funds deposit complete!\n")
+
 
 def transfer_funds(source_account_number, target_account_number, amount):
     withdrawal(source_account_number, amount)
     deposit(target_account_number, amount)
     print("Funds transfer complete!\n")
 
+
+def check_balance(user_account_number):
+    print("Your account balance is {}".format(database[user_account_number][4]))
+
+
 def generate_account_number():
     return random.randrange(1111111111,9999999999)
+
 
 def logout():
     with open("database.txt", mode="w") as f:
