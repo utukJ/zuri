@@ -100,7 +100,7 @@ def bank_operation(account_number):
         destination = input("Input the account number for the destination: \n")
         transfer_funds(account_number, destination, amount)
     elif selected_option == "4":
-        check_balance()
+        check_balance(account_number)
     elif selected_option == "5":
         logout()
         return
