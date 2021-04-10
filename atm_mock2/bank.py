@@ -2,14 +2,14 @@ import json
 import random
 
 
-
+## load database from json if avaaible, else create empty database
 try:
     with open("database.txt", mode="r") as f:
         database = json.load(f)
 except FileNotFoundError:
     database = {}
 
-print("database: ", database)
+# print("database: ", database)
 
 
 def init():
@@ -36,14 +36,17 @@ def login():
         print("To retrieve your account number, you need your email and your password!")
         retrieve_acc_number()
         login()
+        return
     password = input("Enter your password: \n")
 
     if account_number not in database:
         print("Invalid account number!")
         login()
-    if database[account_number][2] != password:
+        return
+    elif database[account_number][2] != password:
         print("Incorrect password!")
         login()
+        return
 
     print("\n***************LOGIN SUCCESSFUL*****************")
     user_details = database[account_number]
