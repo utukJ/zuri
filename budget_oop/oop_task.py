@@ -1,6 +1,7 @@
 class Budget:
-    def __init__(self, amount=0):
+    def __init__(self, amount=0, category="any"):
         self.amount = amount
+        self.category = category
 
     def deposit(self, amount):
         self.amount += amount
@@ -20,8 +21,8 @@ class Budget:
 
 ## Use cases
 
-food = Budget(10000)
-clothing = Budget(10000)
+food = Budget(10000, category="food")
+clothing = Budget(10000, category="clothing")
 entertainment = Budget(10000)
 
 food.deposit(3500)
