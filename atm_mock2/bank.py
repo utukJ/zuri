@@ -13,7 +13,10 @@ except FileNotFoundError:
 
 
 def init():
-    print("Welcome to bankPHP")
+    print("\n\n")
+    print("*"*40)
+    print("**********BANK PHP HOME PAGE***********")
+    print("*"*40)
     user_choice = int(input("Do you want to login or register a new account: login(1) register(2) exit(3)\n"))
     if(user_choice == 1):
         login()
@@ -94,14 +97,14 @@ def bank_operation(account_number):
 
     if selected_option == "1":
         amount = eval(input("How much would you like to deposit: \n"))
-        deposit(account_number, amount)
+        print(deposit(account_number, amount))
     elif selected_option == "2":
         amount = eval(input("How much would you like to withdraw: \n"))
-        withdrawal(account_number, amount)
+        print(withdrawal(account_number, amount))
     elif selected_option == "3":
         amount = eval(input("How much would you like to transfer: \n"))
         destination = input("Input the account number for the destination: \n")
-        transfer_funds(account_number, destination, amount)
+        print(transfer_funds(account_number, destination, amount))
     elif selected_option == "4":
         check_balance(account_number)
     elif selected_option == "5":
@@ -117,21 +120,34 @@ def bank_operation(account_number):
 
 
 
+def can_withdraw(account_number, amount):
+    balance = database[account_number][4]
+    if balance >= amount:
+        return True
+    else:
+        return False
+
+
 def withdrawal(account_number, amount):
-    database[account_number][4] -= amount
-    print("Funds withdrawal complete!\n")
+    if can_withdraw(account_number, amount):
+        database[account_number][4] -= amount
+        return "Funds withdrawal successful. Take your cash!"
+    else:
+        return "Insufficient Funds!"
 
 
 def deposit(account_number, amount):
     database[account_number][4] += amount
-    print("Funds deposit complete!\n")
+    return "Funds deposit successful!\n"
 
 
 def transfer_funds(source_account_number, target_account_number, amount):
-    withdrawal(source_account_number, amount)
-    deposit(target_account_number, amount)
-    print("Funds transfer complete!\n")
-
+    if can_withdraw(source_account_number, amount):
+        withdrawal(source_account_number, amount)
+        deposit(target_account_number, amount)
+        return "Funds transfer successful!\n"
+    else:
+        return "Insufficient Funds!"
 
 def check_balance(user_account_number):
     print("Your account balance is {}".format(database[user_account_number][4]))
@@ -144,6 +160,7 @@ def generate_account_number():
 def logout():
     with open("database.txt", mode="w") as f:
         json.dump(database, f)
+    init()
 
 #### ACTUAL BANKING SYSTEM #####
 
